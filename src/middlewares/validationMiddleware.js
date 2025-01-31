@@ -13,6 +13,20 @@ const validateRequest = (req, res, next) => {
   next();
 };
 
-module.exports = {
-    validateRequest,
+const languageValidator = (languages = ['en', 'hi', 'bn', 'fr']) => {
+  return (req, res, next) => {
+    const { lang } = req.query;
+    if (lang && !languages.includes(lang)) {
+      return res.status(400).json({
+        message: 'Invalid language',
+        supportedLanguages: languages
+      });
+    }
+    next();
   };
+};
+
+module.exports = {
+  validateRequest,
+  languageValidator
+};
